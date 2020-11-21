@@ -3,7 +3,7 @@ Autor: Matheus Victorello
 
 ## O que é então?
 
-O Princípio da responsabilidade única é um dos cinco componentes SOLID, todo mundo fala o que o princípio diz, que uma classe ou função deve fazer apenas uma coisa ou ser modificada por apenas um motivo, o próprio Robert C. Martin (Uncle Bob) o descreve no livro [Agile Software Development](https://books.google.com/books?id=0HYhAQAAIAAJ&redir_esc=y) como "A classe deve ter apenas um motivo para ser modificada", dada a confusão e imprecisão associada ao conseito ele volta a definilo em [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html) como "O princípio é sobre pessoas", ... eeeeehh, meio confuso né, vamos deixar essas descrições e nomes de lado, particularmente eu prefiro chamar-lo de "Princípido não é da minha conta".
+O Princípio da responsabilidade única é um dos cinco componentes SOLID, todo mundo fala o que o princípio diz, que uma classe ou função deve fazer apenas uma coisa ou ser modificada por apenas um motivo, o próprio Robert C. Martin (Uncle Bob) o descreve no livro [Agile Software Development](https://books.google.com/books?id=0HYhAQAAIAAJ&redir_esc=y) como "A classe deve ter apenas um motivo para ser modificada", dada a confusão e imprecisão associada ao conseito ele volta a defini-lo em [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html) como "O princípio é sobre pessoas", ... eeeeehh, meio confuso né, vamos deixar essas descrições e nomes de lado, particularmente eu prefiro chama-lo de "Princípido não é da minha conta".
 Vamos usar esse código como exemplo:
 ```python
 class Game:
@@ -154,7 +154,7 @@ class Player:
 
 		self.bow.update(self.pos)
 ```
-Agora sim, ai está o que um `Player` faz, o `processEvent` processa eventos que são importantes pro `Player`, o `draw` o desenha em uma `surface` e o `update` atualiza sua posição, não nos passa dispercebido o `Bow` que o `Player` tem, e novamente "não é da conta dele" o que o `Bow` faz. Tem essa outra função `shoot`, certamente um `Player` não atira `Arrow`s, um `Bow` sim, o `Player` só usa ele, é claro, o `Player` poderia atirar as `Arrow`s, mas ai ser constrangedor né, vamos ver como o `Bow` faz.
+Agora sim, ai está o que um `Player` faz, o `processEvent` processa eventos que são importantes para ele, o `draw` o desenha em uma `surface` e o `update` atualiza sua posição, não nos passa despercebido o `Bow` que o `Player` tem, novamente, "não é da conta dele" o que o `Bow` faz. Tem essa outra função `shoot` do `Bow`, certamente um `Player` não atira `Arrow`'s, um `Bow` sim, o `Player` só usa ele, é claro, o `Player` poderia atirar as `Arrow`'s, mas ai ser constrangedor né, vamos ver como o `Bow` faz.
 ```python
 class Bow:
 	def __init__(self, pos):
@@ -191,7 +191,7 @@ class Bow:
 	def arrowOnScreen(self, arrow):
 		return onScreen(arrow.pos)
 ```
-Analogamente ao `Player`, o `Bow` se desenha na `draw` e atualiza sua posição na `update`, mas é a `shoot` que nos intereça, o `Bow` recebe do `Player` o ..., não né o `Bow` nem sabe o que é `Player`, so ponto de vista dele ele só recebe. O ponto é que o `Bow` transforma o `target` em uma `origin` e `direction` para poder informar um `Arrow` o que fazer.
+Analogamente ao `Player`, o `Bow` se desenha na `draw` e atualiza sua posição na `update`, mas é a `shoot` que nos intereça, o `Bow` recebe do `Player` o ..., não né, o `Bow` nem sabe o que é `Player`, do ponto de vista dele ele só recebe e vida que segue. O ponto é que o `Bow` transforma o `target` em uma `origin` e `direction` para poder informar um `Arrow` o que fazer.
 ```python
 class Arrow:
 	def __init__(self, origin, direction):
@@ -215,3 +215,5 @@ class Arrow:
 		self.pos = (x, y)
 ```
 A `Arrow` por sua vez faz o que tem que fazer, voa por ai até morrer.
+
+É desse modo que cada um faz o que têm que fazer e ninguém quer saber como.
