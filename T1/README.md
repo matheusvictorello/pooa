@@ -3,7 +3,7 @@ Autor: Matheus Victorello
 
 ## O que é então?
 
-O Princípio da responsabilidade única é um dos cinco componentes SOLID, todo mundo fala o que o princípio diz, que uma classe ou função deve fazer apenas uma coisa ou ser modificada por apenas um motivo, o próprio Robert C. Martin (Uncle Bob) o descreve no livro [Agile Software Development](https://books.google.com/books?id=0HYhAQAAIAAJ&redir_esc=y) como "A classe deve ter apenas um motivo para ser modificada", dada a confusão e imprecisão associada ao conseito ele volta a defini-lo em [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html) como "O princípio é sobre pessoas", ... eeeeehh, meio confuso né, vamos deixar essas descrições e nomes de lado, particularmente eu prefiro chama-lo de "Princípido não é da minha conta".
+O Princípio da responsabilidade única é um dos cinco componentes SOLID, todo mundo fala o que o princípio diz, que uma classe ou função deve fazer apenas uma coisa ou ser modificada por apenas um motivo, o próprio Robert C. Martin (Uncle Bob) o descreve no livro [Agile Software Development](https://books.google.com/books?id=0HYhAQAAIAAJ&redir_esc=y) como "A classe deve ter apenas um motivo para ser modificada", dada a confusão e imprecisão associada ao conseito ele volta a defini-lo em [The Clean Code Blog](https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html) como "O princípio é sobre pessoas", ... eeeeehh, meio confuso né, vamos deixar essas descrições e nomes de lado, particularmente eu prefiro chamá-lo de "Princípio não é da minha conta".
 Vamos usar esse código como exemplo:
 ```python
 class Game:
@@ -83,7 +83,7 @@ class Game:
 			clock.tick(60)
 		pygame.quit()
 ```
-Quem fez essa monstruosidade definitivamente tinha tudo sobre controle, o problema é que ... só ele né, dependendo nem ele, daqui a um més com certeza nem ele.
+Quem fez essa monstruosidade definitivamente tinha tudo sobre controle, o problema é que ... só ele né, dependendo nem ele, daqui a um mês com certeza nem ele.
 Como melhorar ? Meu ponto de partida é o altruísmo, por exemplo, vamos nos colocar no lugar de um objeto `Game` por um momento, primeiro não há nada, então algo nos instancia e nos dá responsabilidade sobre esse código ai, e a gente pensa, "mas o que ~~merda~~ é essa", exatamente, a vida de um `Game` não é fácil.
 
 ## E agora?
@@ -118,7 +118,7 @@ if __name__ == '__main__':
 	main()
 ```
 O Game não existe mais, ufa, bom pra ele, mas agora tem uma tal de `main`, que é uma função, isso porque ela não tem sentimentos, memória própria, ideias, comportamentos, praticamente um zumbi, ela só tem que fazer seu trabalho, que trabalho?
-Se a gente observar vamos conseguir ver algumas coisas sendo declaradas, um loop, eventos, `player`, `screen`, `update`, `draw`, isso mesmo, é um "game loop" de um jogo que tem apenas um player, e ai que entra o nome do princípio, não, não o da "Responsabilidade única", mas sim o "Princípido não é da minha conta", a `main` não liga para o que o `player` faz em `processEvent`, `fill` ou `draw`, falaram para ela chamar essas funções e isso que ela faz.
+Se a gente observar vamos conseguir ver algumas coisas sendo declaradas, um loop, eventos, `player`, `screen`, `update`, `draw`, isso mesmo, é um "game loop" de um jogo que tem apenas um player, e aí que entra o nome do princípio, não, não o da "Responsabilidade única", mas sim o "Princípio não é da minha conta", a `main` não liga para o que o `player` faz em `processEvent`, `fill` ou `draw`, falaram para ela chamar essas funções e isso que ela faz.
 Mas calma lá, a gente se importa.
 ```python
 class Player:
@@ -154,7 +154,7 @@ class Player:
 
 		self.bow.update(self.pos)
 ```
-Agora sim, ai está o que um `Player` faz, o `processEvent` processa eventos que são importantes para ele, o `draw` o desenha em uma `surface` e o `update` atualiza sua posição, não nos passa despercebido o `Bow` que o `Player` tem, novamente, "não é da conta dele" o que o `Bow` faz. Tem essa outra função `shoot` do `Bow`, certamente um `Player` não atira `Arrow`'s, um `Bow` sim, o `Player` só usa ele, é claro, o `Player` poderia atirar as `Arrow`'s, mas ai ser constrangedor né, vamos ver como o `Bow` faz.
+Agora sim, aí está o que um `Player` faz, o `processEvent` processa eventos que são importantes para ele, o `draw` o desenha em uma `surface` e o `update` atualiza sua posição, não nos passa despercebido o `Bow` que o `Player` tem, novamente, "não é da conta dele" o que o `Bow` faz. Tem essa outra função `shoot` do `Bow`, certamente um `Player` não atira `Arrow`'s, um `Bow` sim, o `Player` só usa ele, é claro, o `Player` poderia atirar as `Arrow`'s, mas aí ser constrangedor né, vamos ver como o `Bow` faz.
 ```python
 class Bow:
 	def __init__(self, pos):
@@ -191,7 +191,7 @@ class Bow:
 	def arrowOnScreen(self, arrow):
 		return onScreen(arrow.pos)
 ```
-Analogamente ao `Player`, o `Bow` se desenha na `draw` e atualiza sua posição na `update`, mas é a `shoot` que nos intereça, o `Bow` recebe do `Player` o ..., não né, o `Bow` nem sabe o que é `Player`, do ponto de vista dele ele só recebe e vida que segue. O ponto é que o `Bow` transforma o `target` em uma `origin` e `direction` para poder informar um `Arrow` o que fazer.
+Analogamente ao `Player`, o `Bow` se desenha na `draw` e atualiza sua posição na `update`, mas é a `shoot` que nos interessa, o `Bow` recebe do `Player` o ..., não né, o `Bow` nem sabe o que é `Player`, do ponto de vista dele ele só recebe e vida que segue. O ponto é que o `Bow` transforma o `target` em uma `origin` e `direction` para poder informar um `Arrow` o que fazer.
 ```python
 class Arrow:
 	def __init__(self, origin, direction):
@@ -214,6 +214,6 @@ class Arrow:
 		y += vy
 		self.pos = (x, y)
 ```
-A `Arrow` por sua vez faz o que tem que fazer, voa por ai até morrer.
+A `Arrow` por sua vez faz o que tem que fazer, voa por aí até morrer.
 
 É desse modo que cada um faz o que têm que fazer e ninguém quer saber como.
